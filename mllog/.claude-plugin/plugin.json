@@ -1,7 +1,7 @@
 {
   "name": "mllog",
-  "version": "1.1.0",
-  "description": "Automatic experiment logging for ML coding sessions. Captures per-run facts (metrics, git state, transcript) on session start/stop, and provides /mllog and /logbook commands.",
+  "version": "1.2.0",
+  "description": "Automatic experiment logging for ML coding sessions. Captures per-run facts (agent events, git state, optional MLflow) on session stop, and provides /mllog and /logbook commands.",
   "author": {
     "name": "Jean Johnson",
     "url": "https://github.com/jean-johnson-zwix"

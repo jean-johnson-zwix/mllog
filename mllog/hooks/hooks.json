@@ -1,23 +1,11 @@
 {
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "MLLOG=\"$(pwd)/.venv/bin/mllog\"; [ -f \"$MLLOG\" ] || MLLOG=\"$(pwd)/.venv/Scripts/mllog.exe\"; [ -f \"$MLLOG\" ] && \"$MLLOG\" start-session 2>/dev/null; exit 0",
-            "timeout": 10,
-            "statusMessage": "mllog: starting session..."
-          }
-        ]
-      }
-    ],
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "MLLOG=\"$(pwd)/.venv/bin/mllog\"; [ -f \"$MLLOG\" ] || MLLOG=\"$(pwd)/.venv/Scripts/mllog.exe\"; [ -f \"$MLLOG\" ] || exit 0; INPUT=$(cat); TRANSCRIPT=$(echo \"$INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('transcriptPath') or d.get('transcript_path',''))\" 2>/dev/null || true); ARGS=(capture --type analysis --outcome success --auto); [ -n \"$TRANSCRIPT\" ] && [ -f \"$TRANSCRIPT\" ] && ARGS+=(--transcript \"$TRANSCRIPT\"); \"$MLLOG\" \"${ARGS[@]}\" 2>/dev/null; exit 0",
+            "command": "MLLOG=\"$(pwd)/.venv/bin/mllog\"; [ -f \"$MLLOG\" ] || MLLOG=\"$(pwd)/.venv/Scripts/mllog.exe\"; [ -f \"$MLLOG\" ] || exit 0; INPUT=$(cat); PYEXE=$(dirname \"$MLLOG\")/python; [ -f \"$PYEXE\" ] || PYEXE=$(dirname \"$MLLOG\")/python.exe; [ -f \"$PYEXE\" ] || PYEXE=python3; SESSION=$(echo \"$INPUT\" | \"$PYEXE\" -c \"import sys,json; d=json.load(sys.stdin); print(d.get('transcriptPath') or d.get('transcript_path',''))\" 2>/dev/null || true); ARGS=(capture --type analysis --status ok --auto); [ -n \"$SESSION\" ] && [ -f \"$SESSION\" ] && ARGS+=(--session-path \"$SESSION\"); \"$MLLOG\" \"${ARGS[@]}\" 2>/dev/null; exit 0",
             "timeout": 15,
             "statusMessage": "mllog: capturing run..."
           }

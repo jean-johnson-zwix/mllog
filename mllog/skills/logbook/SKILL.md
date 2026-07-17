@@ -32,17 +32,18 @@ a time window, synthesizes a written logbook, and renders it as a document.
    the last-report checkpoint and start from there to now.
 
 2. **Select records** in that window from the local store:
-   `mllog query --from <...> --to <...> --json` (read-only).
+   `mllog get-logs --from <...> --to <...> --json` (read-only).
 
 3. **Synthesize the logbook** from the selected records: what was attempted, what changed, what
    the results show, and what to do next — organized by run/activity. Note each metric's
    source (MLflow vs agent session) where relevant. Ground every claim per the hard rules.
 
 4. **Render the document** deterministically from the records:
-   `mllog render --from <...> --to <...> --out <path>`. This is a pure projection of the JSON.
+   `mllog get-logs --from <...> --to <...> --render --out <path>`. This is a pure projection
+   of the JSON.
 
 5. **Advance the checkpoint** so the next default `/logbook` starts where this one ended:
    `mllog checkpoint --advance`.
 
 6. **Report back** concisely: the window covered, how many runs were included, the output
-   document location, and any records with missing git/MLflow/metrics info.
+   document location, and any records with missing git/MLflow info.
