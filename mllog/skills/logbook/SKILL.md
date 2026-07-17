@@ -10,8 +10,9 @@ license: MIT
 # /logbook — generate the logbook
 
 You are the **report step** of the mllog pipeline. Per-run capture has already stored JSON
-records locally (via `/mllog` or the automatic Stop hook). This command reads those records over
-a time window, synthesizes a written logbook, and renders it as a document.
+records locally (via `/mllog` or the automatic Stop hook). Your job is to **read those records
+and write a narrative logbook** — a document a researcher can read to understand what happened,
+what changed, what the results were, and what to do next.
 
 **Hard rules**
 
@@ -31,19 +32,59 @@ a time window, synthesizes a written logbook, and renders it as a document.
 1. **Resolve the window.** If `$ARGUMENTS` specifies `--from`/`--to`, use it. Otherwise read
    the last-report checkpoint and start from there to now.
 
-2. **Select records** in that window from the local store:
-   `mllog get-logs --from <...> --to <...> --json` (read-only).
+2. **Fetch records** in that window:
+   `mllog get-logs --from <...> --to <...> --json`
 
-3. **Synthesize the logbook** from the selected records: what was attempted, what changed, what
-   the results show, and what to do next — organized by run/activity. Note each metric's
-   source (MLflow vs agent session) where relevant. Ground every claim per the hard rules.
+3. **Write the logbook yourself as a markdown file.** This is the core of this skill — YOU
+   write the narrative, not the CLI. Structure it as follows:
 
-4. **Render the document** deterministically from the records:
-   `mllog get-logs --from <...> --to <...> --render --out <path>`. This is a pure projection
-   of the JSON.
+   ```markdown
+   # Experiment Logbook: <from> to <to>
 
-5. **Advance the checkpoint** so the next default `/logbook` starts where this one ended:
-   `mllog checkpoint --advance`.
+   ## Summary
+   A 2-3 sentence overview: how many runs, what was the main thrust of work,
+   what was the headline result.
 
-6. **Report back** concisely: the window covered, how many runs were included, the output
-   document location, and any records with missing git/MLflow info.
+   ## Runs
+
+   ### Run 1: <activity_type> — <status>
+   **When:** <started_at>
+   **Git:** <commit> (dirty/clean)
+
+   **What was attempted:** Describe what this run did based on the config deltas,
+   edited files, and commands. e.g. "Lowered learning rate from 3e-4 to 1e-4 in
+   configs/train.yaml and re-ran training for 10 epochs."
+
+   **What changed:** List files edited, config changes, code changes.
+
+   **Results:** Present the metrics in a table. Compare to previous runs if data
+   is available. Note the metrics source (MLflow vs agent session).
+
+   **Observations:** Any notable patterns — did accuracy improve? Did the run fail?
+   Was comparison safety flagged?
+
+   (repeat for each run)
+
+   ## What's Next
+   Based on the trajectory of results, suggest 1-3 concrete next steps.
+   Only suggest things grounded in the data.
+   ```
+
+   Write this file to `logbook.md` in the project root (or the path specified in arguments).
+
+4. **Advance the checkpoint:**
+   `mllog checkpoint --advance`
+
+5. **Report back** concisely: the window covered, how many runs were included, the output
+   file location, and any records with missing data.
+
+## Key guidance
+
+- **DO NOT** just run `mllog get-logs --render`. That produces a raw data dump, not a logbook.
+  Your value is interpreting the facts into a readable narrative.
+- Compare metrics across runs when multiple runs exist in the window.
+- If a run has `comparison_safety.safe_for_delta: false`, note that metric comparisons to
+  prior runs are unreliable because code or config changed.
+- If `events` were captured, use them to describe what the agent did (edits, commands).
+- If `config_deltas` exist, call out the specific parameter changes.
+- Keep it factual but readable. A researcher should be able to skim this and know what happened.
