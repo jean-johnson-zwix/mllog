@@ -9,21 +9,22 @@ alwaysApply: false
 When the user completes a training, evaluation, or analysis run, suggest capturing it:
 
 ```bash
-mllog capture --type <train|eval|analysis> --outcome <success|fail> --auto
+mllog capture --type <train|eval|analysis|attempt_failed> --status <ok|failed> --name "short title" --auto
 ```
 
-To generate a logbook report:
-```bash
-mllog render --from yesterday --out logbook.md
+To generate a PDF experiment report, use the `/logbook` skill — the agent reads stored records, analyzes them, and generates a rich PDF via reportlab:
+```
+/logbook --from yesterday
 ```
 
 To query recent runs:
 ```bash
-mllog query --from yesterday --json
+mllog get-logs --from yesterday --json
 ```
 
 **Rules:**
-- Record facts only: raw metrics, git commit, outcome. Do not invent values.
+- Record facts only: agent events, git commit, status. Do not invent values.
 - If MLflow is present, capture the run id. If not, skip it — mllog works without it.
-- Determine outcome from the session: errors/crashes = `fail`, otherwise `success`.
-- Classify type from context: model training → `train`, held-out metrics → `eval`, inspection/plotting → `analysis`.
+- Determine status from the session: errors/crashes = `failed`, otherwise `ok`.
+- Classify type from context: model training -> `train`, held-out metrics -> `eval`, inspection/plotting -> `analysis`, failed/aborted -> `attempt_failed`.
+- Choose a display name (--name) that summarizes what was done (≤60 chars).

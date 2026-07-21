@@ -33,16 +33,21 @@ job.
 1. **Determine the activity type.** Use `$ARGUMENTS` if given; otherwise classify from the
    session: model training -> `train`; metrics on a held-out set -> `eval`;
    inspecting/plotting/explaining without a new run -> `analysis`.
+   If the session failed (errors, crashes, aborted), use `attempt_failed`.
 
 2. **Determine the status** (`ok` | `failed`) from the session — errors, crashes, or
    aborted runs mean `failed`. If `failed`, note the likely cause from the evidence.
 
-3. **Write the run record** to the local store via the CLI. The capture command automatically
+3. **Choose a display name** — a short, meaningful title for the session (≤60 chars).
+   Examples: "Fix LR scheduler bug", "Eval on MMLU-Pro", "Add dropout to encoder".
+   Summarize *what was done*, not the outcome.
+
+4. **Write the run record** to the local store via the CLI. The capture command automatically
    gathers git info, agent events, and optional MLflow data via sensors:
-   `mllog capture --type <type> --status <status>`.
+   `mllog capture --type <type> --status <status> --name "<display_name>"`.
 
    If you have the session JSONL path, pass it:
-   `mllog capture --type <type> --status <status> --session-path <path>`.
+   `mllog capture --type <type> --status <status> --name "<display_name>" --session-path <path>`.
 
-4. **Confirm** briefly: type, status, whether git and MLflow info were present, and the
-   record location. Flag anything missing rather than filling it in.
+5. **Confirm** briefly: type, status, display name, whether git and MLflow info were
+   present, and the record location. Flag anything missing rather than filling it in.
