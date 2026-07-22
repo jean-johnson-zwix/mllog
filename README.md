@@ -1,4 +1,4 @@
-# multimodal-mllog-plugin — Claude Code Plugin
+# mllog — Claude Code Plugin
 
 Automatic experiment logging for ML coding sessions.
 
@@ -6,7 +6,7 @@ Automatic experiment logging for ML coding sessions.
 
 - **Stop hook** — auto-captures a run record (agent events, git state, session transcript ref)
 - `/mllog` — manually capture a run
-- `/logbook` — generate a markdown logbook from stored records
+- `/logbook` — generate a PDF experiment report from stored records
 
 ## Prerequisites
 
@@ -19,17 +19,8 @@ The `mllog` CLI must be on PATH (installed via pip in your project's venv).
 ## Install the plugin
 
 ```
-/plugins add jean-johnson-zwix/ml-plugins
-```
-
-Or add to your Claude Code settings:
-
-```json
-{
-  "enabledPlugins": {
-    "mllog@ml-plugins": true
-  }
-}
+/plugin marketplace add jean-johnson-zwix/mllog
+/plugin install mllog@mllog
 ```
 
 ## Usage
@@ -41,5 +32,5 @@ Or add to your Claude Code settings:
 
 ## Storage
 
-Records are stored locally at `./mllog/records/<date>/<record_id>.json`.
+Records are stored locally at `./mllog/records/<YYYY-MM-DD>.jsonl`.
 Override with the `MLLOG_DIR` environment variable.

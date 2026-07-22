@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "ml-plugins",
-  "description": "ML experiment tooling plugins for AI coding agents.",
+  "name": "mllog",
+  "description": "Automatic experiment logging for ML coding sessions.",
   "owner": {
     "name": "Jean Johnson",
     "url": "https://github.com/jean-johnson-zwix"
@@ -10,7 +10,7 @@
     {
       "name": "mllog",
       "description": "Auto-captures ML experiment runs via Stop hook. Provides /mllog (manual capture) and /logbook (report generation) commands.",
-      "source": "./mllog/",
+      "source": "./",
       "category": "productivity"
     }
   ]
