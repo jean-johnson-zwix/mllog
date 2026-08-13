@@ -3,7 +3,7 @@ name: logbook
 description: >
   Generate a PDF experiment report over a time window by reading the local mllog run records.
 argument-hint: "[--from <when>] [--to <when>]  e.g. --from yesterday"
-allowed-tools: Bash(mllog:*), Bash(git:*), Bash(python:*), Read, Write, Glob, Grep
+allowed-tools: Bash(mllog:*), Bash(mllog-python:*), Bash(git:*), Read, Write, Glob, Grep
 license: MIT
 ---
 
@@ -121,8 +121,7 @@ understand what happened, what changed, what the results were, and what to do ne
    - **Recommendations** (1-3 concrete next steps supported by data)
 
 5. **Run the script:**
-   `.venv/Scripts/python ./mllog/.logbook_gen.py` (Windows)
-   or `.venv/bin/python ./mllog/.logbook_gen.py` (Unix)
+   `mllog-python ./mllog/.logbook_gen.py`
 
 6. **Clean up** the generator script: delete `./mllog/.logbook_gen.py`
 
