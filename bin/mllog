@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Wrapper that execs mllog from the plugin's bootstrapped venv.
+# Added to the Bash tool's PATH by Claude Code when the plugin is enabled.
+VENV="${CLAUDE_PLUGIN_DATA:+${CLAUDE_PLUGIN_DATA}/venv}"
+VENV="${VENV:-$HOME/.claude/plugins/data/mllog/venv}"
+MLLOG="$VENV/bin/mllog"
+[ -f "$MLLOG" ] || MLLOG="$VENV/Scripts/mllog.exe"
+[ -f "$MLLOG" ] || { echo "mllog not installed yet — restart session to trigger bootstrap." >&2; exit 1; }
+exec "$MLLOG" "$@"
