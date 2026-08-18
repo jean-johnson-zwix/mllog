@@ -2,7 +2,8 @@
 # Wrapper that execs mllog from the plugin's bootstrapped venv.
 # Added to the Bash tool's PATH by Claude Code when the plugin is enabled.
 VENV="${CLAUDE_PLUGIN_DATA:+${CLAUDE_PLUGIN_DATA}/venv}"
-VENV="${VENV:-$HOME/.claude/plugins/data/mllog/venv}"
+# ponytail: glob fallback — data dir name includes marketplace name, which varies
+VENV="${VENV:-$(ls -d "$HOME/.claude/plugins/data/mllog-"*/venv 2>/dev/null | head -1)}"
 MLLOG="$VENV/bin/mllog"
 [ -f "$MLLOG" ] || MLLOG="$VENV/Scripts/mllog.exe"
 [ -f "$MLLOG" ] || { echo "mllog not installed yet — restart session to trigger bootstrap." >&2; exit 1; }

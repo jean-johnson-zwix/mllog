@@ -2,7 +2,8 @@
 # Wrapper that execs python from the plugin's bootstrapped venv.
 # Used by /logbook skill to run reportlab scripts.
 VENV="${CLAUDE_PLUGIN_DATA:+${CLAUDE_PLUGIN_DATA}/venv}"
-VENV="${VENV:-$HOME/.claude/plugins/data/mllog/venv}"
+# ponytail: glob fallback — data dir name includes marketplace name, which varies
+VENV="${VENV:-$(ls -d "$HOME/.claude/plugins/data/mllog-"*/venv 2>/dev/null | head -1)}"
 PYEXE="$VENV/bin/python"
 [ -f "$PYEXE" ] || PYEXE="$VENV/Scripts/python.exe"
 [ -f "$PYEXE" ] || { echo "mllog venv not set up — restart session to trigger bootstrap." >&2; exit 1; }
