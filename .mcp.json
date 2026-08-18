@@ -4,7 +4,7 @@
       "command": "bash",
       "args": [
         "-c",
-        "V=\"${CLAUDE_PLUGIN_DATA}/venv\"; [ -d \"$V\" ] || V=$(ls -d \"$HOME/.claude/plugins/data/mllog-\"*/venv 2>/dev/null | head -1); P=\"$V/bin/python\"; [ -f \"$P\" ] || P=\"$V/Scripts/python.exe\"; [ -f \"$P\" ] || { echo 'mllog venv not found' >&2; exit 1; }; exec \"$P\" -m mllog.mcp_server"
+        "S=\"${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/mcp-server.sh}\"; [ -f \"$S\" ] || S=$(ls \"$HOME/.claude/plugins/cache/\"*/mllog/*/mcp-server.sh 2>/dev/null | tail -1); exec bash \"$S\""
       ]
     }
   }
