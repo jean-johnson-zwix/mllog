@@ -4,7 +4,7 @@ description: >
   Capture the run that just completed as a JSON record in the local mllog store
   (agent events, git state, optional MLflow).
 argument-hint: "[train|eval|analysis]"
-allowed-tools: Bash(mllog:*), Bash(git:*), Read, Glob, Grep
+allowed-tools: mcp__plugin_mllog_mllog__mllog_capture, mcp__plugin_mllog_mllog__mllog_query, Bash(git:*), Read, Glob, Grep
 license: MIT
 ---
 
@@ -42,12 +42,10 @@ job.
    Examples: "Fix LR scheduler bug", "Eval on MMLU-Pro", "Add dropout to encoder".
    Summarize *what was done*, not the outcome.
 
-4. **Write the run record** to the local store via the CLI. The capture command automatically
-   gathers git info, agent events, and optional MLflow data via sensors:
-   `mllog capture --type <type> --status <status> --name "<display_name>"`.
-
-   If you have the session JSONL path, pass it:
-   `mllog capture --type <type> --status <status> --name "<display_name>" --session-path <path>`.
+4. **Capture the record** using the `mllog_capture` tool with:
+   - `activity_type`: the type from step 1
+   - `status`: ok or failed from step 2
+   - `display_name`: the title from step 3
 
 5. **Confirm** briefly: type, status, display name, whether git and MLflow info were
    present, and the record location. Flag anything missing rather than filling it in.

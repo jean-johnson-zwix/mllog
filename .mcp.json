@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "mllog": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "V=\"${CLAUDE_PLUGIN_DATA}/venv\"; [ -d \"$V\" ] || V=$(ls -d \"$HOME/.claude/plugins/data/mllog-\"*/venv 2>/dev/null | head -1); P=\"$V/bin/python\"; [ -f \"$P\" ] || P=\"$V/Scripts/python.exe\"; [ -f \"$P\" ] || { echo 'mllog venv not found' >&2; exit 1; }; exec \"$P\" -m mllog.mcp_server"
+      ]
+    }
+  }
+}

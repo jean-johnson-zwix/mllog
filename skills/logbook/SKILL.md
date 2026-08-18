@@ -3,7 +3,7 @@ name: logbook
 description: >
   Generate a PDF experiment report over a time window by reading the local mllog run records.
 argument-hint: "[--from <when>] [--to <when>]  e.g. --from yesterday"
-allowed-tools: Bash(mllog:*), Bash(mllog-python:*), Bash(git:*), Read, Write, Glob, Grep
+allowed-tools: mcp__plugin_mllog_mllog__mllog_query, mcp__plugin_mllog_mllog__mllog_get_record, Bash(mllog-python:*), Bash(git:*), Read, Write, Glob, Grep
 license: MIT
 ---
 
@@ -34,8 +34,8 @@ understand what happened, what changed, what the results were, and what to do ne
 1. **Resolve the window.** If `$ARGUMENTS` specifies `--from`/`--to`, use it. Otherwise read
    the last-report checkpoint (`mllog checkpoint --show`) and start from there to now.
 
-2. **Fetch records** in that window:
-   `mllog get-logs --from <...> --to <...> --json`
+2. **Fetch records** using the `mllog_query` tool with the resolved `from_when` and `to_when`.
+   Parse the returned JSON array of records.
 
 3. **Analyze the records.** Read each record's sources deeply:
    - `sources.agent`: edit_ledger (files touched, churn), config_deltas (parameter changes),
@@ -45,6 +45,8 @@ understand what happened, what changed, what the results were, and what to do ne
    - `sources.env`: python version, platform
    - `digest`: summary and evidence-backed claims (if present)
    - `transcript_ref`: pointer to full session log (read it for context if available)
+
+   Use `mllog_get_record` to fetch individual record details if the query result is truncated.
 
 4. **Write a Python script that generates the PDF using reportlab.** Save the script to
    `./mllog/.logbook_gen.py` and run it with the project's Python.
