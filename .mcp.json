@@ -2,10 +2,7 @@
   "mcpServers": {
     "mllog": {
       "command": "bash",
-      "args": [
-        "-c",
-        "S=\"${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/mcp-server.sh}\"; [ -f \"$S\" ] || S=$(ls \"$HOME/.claude/plugins/cache/\"*/mllog/*/mcp-server.sh 2>/dev/null | tail -1); exec bash \"$S\""
-      ]
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server.sh"]
     }
   }
 }
